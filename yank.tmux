@@ -14,7 +14,7 @@ clipboard_copy_without_newline_command() {
 
 set_error_bindings() {
     local key_bindings key
-    key_bindings="$(yank_key) $(put_key) $(yank_put_key)"
+    key_bindings="$(yank_key_vi) $(yank_key) $(put_key) $(yank_put_key_vi) $(yank_put_key)"
     for key in $key_bindings; do
         if tmux_is_at_least 2.4; then
             tmux bind-key -t copy-mode-vi "$key" send-keys -X copy-pipe-and-cancel "tmux display-message 'Error! tmux-yank dependencies not installed!'"
@@ -41,9 +41,9 @@ set_copy_mode_bindings() {
     local copy_wo_newline_command
     copy_wo_newline_command="$(clipboard_copy_without_newline_command "$copy_command")"
     if tmux_is_at_least 2.4; then
-        tmux bind-key -T copy-mode-vi "$(yank_key)"            send-keys -X copy-pipe-and-cancel "$copy_command"
+        tmux bind-key -T copy-mode-vi "$(yank_key_vi)"         send-keys -X copy-pipe-and-cancel "$copy_command"
         tmux bind-key -T copy-mode-vi "$(put_key)"             send-keys -X copy-pipe-and-cancel "tmux paste-buffer"
-        tmux bind-key -T copy-mode-vi "$(yank_put_key)"        send-keys -X copy-pipe-and-cancel "$copy_command; tmux paste-buffer"
+        tmux bind-key -T copy-mode-vi "$(yank_put_key_vi)"     send-keys -X copy-pipe-and-cancel "$copy_command; tmux paste-buffer"
         tmux bind-key -T copy-mode-vi "$(yank_wo_newline_key)" send-keys -X copy-pipe-and-cancel "$copy_wo_newline_command"
 
         tmux bind-key -T copy-mode    "$(yank_key)"            send-keys -X copy-pipe-and-cancel "$copy_command"
@@ -51,9 +51,9 @@ set_copy_mode_bindings() {
         tmux bind-key -T copy-mode    "$(yank_put_key)"        send-keys -X copy-pipe-and-cancel "$copy_command; tmux paste-buffer"
         tmux bind-key -T copy-mode    "$(yank_wo_newline_key)" send-keys -X copy-pipe-and-cancel "$copy_wo_newline_command"
     else
-        tmux bind-key -t vi-copy      "$(yank_key)"            copy-pipe "$copy_command"
+        tmux bind-key -t vi-copy      "$(yank_key_vi)"         copy-pipe "$copy_command"
         tmux bind-key -t vi-copy      "$(put_key)"             copy-pipe "tmux paste-buffer"
-        tmux bind-key -t vi-copy      "$(yank_put_key)"        copy-pipe "$copy_command; tmux paste-buffer"
+        tmux bind-key -t vi-copy      "$(yank_put_key_vi)"     copy-pipe "$copy_command; tmux paste-buffer"
         tmux bind-key -t vi-copy      "$(yank_wo_newline_key)" copy-pipe "$copy_wo_newline_command"
 
         tmux bind-key -t emacs-copy   "$(yank_key)"            copy-pipe "$copy_command"

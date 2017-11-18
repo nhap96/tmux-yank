@@ -6,13 +6,15 @@ yank_line_option="@yank_line"
 yank_pane_pwd="Y"
 yank_pane_pwd_option="@yank_pane_pwd"
 
-yank_default="y"
+yank_default_vi="y"
+yank_default="M-w"
 yank_option="@copy_mode_yank"
 
 put_default="Y"
 put_option="@copy_mode_put"
 
-yank_put_default="M-y"
+yank_put_default_vi="p"
+yank_put_default="C-y"
 yank_put_option="@copy_mode_yank_put"
 
 yank_wo_newline_default="!"
@@ -51,12 +53,20 @@ yank_pane_pwd_key() {
     get_tmux_option "$yank_pane_pwd_option" "$yank_pane_pwd"
 }
 
+yank_key_vi() {
+    get_tmux_option "$yank_option" "$yank_default_vi"
+}
+
 yank_key() {
     get_tmux_option "$yank_option" "$yank_default"
 }
 
 put_key() {
     get_tmux_option "$put_option" "$put_default"
+}
+
+yank_put_key_vi() {
+    get_tmux_option "$yank_put_option" "$yank_put_default_vi"
 }
 
 yank_put_key() {
